@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.leaflet-container {
+  font-family: var(--font-sans);
+}
+
+.ml-vehicle-marker,
+.ml-station-marker,
+.ml-city-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-control-layers {
+  border-radius: 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12) !important;
+  font-family: var(--font-sans);
+}

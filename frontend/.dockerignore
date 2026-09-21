@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+*.md
+.env
+.env.*
+!.env.example
+coverage
+.vite
+.DS_Store
+*.log

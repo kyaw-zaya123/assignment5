@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: myanmar-logistics-intel-db
+    environment:
+      POSTGRES_DB: myanmar_logistics_intel
+      POSTGRES_USER: logistics
+      POSTGRES_PASSWORD: logistics_dev
+    ports:
+      - "5435:5432"
+    volumes:
+      - myanmar_intel_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U logistics -d myanmar_logistics_intel"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  backend:
+    build:
+      context: ./backend
+    container_name: myanmar-logistics-intel-api
+    env_file:
+      - ./backend/.env
+    environment:
+      # DB connection must point at the compose "postgres" service name — keep this fixed.
+      DATABASE_URL: postgresql+psycopg2://logistics:logistics_dev@postgres:5432/myanmar_logistics_intel
+      CORS_ORIGINS: http://localhost:4173,http://127.0.0.1:4173,http://192.168.11.201:4173,http://localhost:1234,http://127.0.0.1:1234
+      # Everything below is intentionally NOT pinned here anymore — it is read from
+      # backend/.env instead, so the demo works on any machine/network. The old
+      # hardcoded values (a private 192.168.x.x Qdrant box + a host-only Gemma
+      # server) only existed on the original developer's laptop; on any other
+      # machine those hosts are unreachable and previously crashed the AI panel
+      # and gate-close alerts with a 500 error. QDRANT/GEMMA/WEATHER are now
+      # optional enrichments — see backend/.env.example.
+      # Weather: leave unset here so backend/.env controls stub vs openweather.
+      # Forcing stub previously hid precipitation tiles even when a key was present.
+      EMBEDDING_MODE: keyword
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8010:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api
+    container_name: myanmar-logistics-intel-web
+    ports:
+      - "4173:80"
+    depends_on:
+      - backend
+
+volumes:
+  myanmar_intel_pg:
