@@ -12,7 +12,7 @@ React dashboard (:4173)
    FastAPI (:8010)
         ├── PostGIS (shipments, GPS, risks)
         ├── Weather (stub / OpenWeather)
-        ├── Qdrant OSINT @ 192.168.11.52:6333 / content
+        ├── Qdrant OSINT @ xxx.xxx.xx.xxx:6333 / content
         └── Gemma-e2b @ GEMMA_URL (default :8004)
 ```
 
@@ -32,7 +32,7 @@ docker compose up --build -d
 
 External (already running on this host):
 
-- Qdrant: `http://192.168.11.52:6333` collection `content`
+- Qdrant: `http://xxx.xxx.xx.xxx:6333` collection `content`
 - Gemma: `http://127.0.0.1:8004` model `Gemma-SEA-LION-v4.5-E2B-IT`
 
 ## Native API (optional)
